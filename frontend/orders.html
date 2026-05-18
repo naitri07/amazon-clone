@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Clone – My Orders</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <a href="index.html" class="nav-logo border"><div class="logo"></div></a>
+    <div class="nav-search" style="flex:1">
+      <select class="search-select"><option>All</option></select>
+      <input class="search-input" placeholder="Search Amazon.in">
+      <div class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+    </div>
+    <div class="nav-item border" id="accountBox" onclick="toggleAccountMenu()">
+      <span class="top-line" id="helloText">Hello, sign in</span>
+      <span class="bot-line">Account &amp; Lists ▾</span>
+      <div class="account-dropdown-menu" id="accountMenu">
+        <div id="accountMenuContent"></div>
+      </div>
+    </div>
+    <a href="cart.html" class="nav-cart-btn border">
+      <i class="fa-solid fa-cart-shopping" style="font-size:1.9rem"></i>
+      <span class="cart-count" id="cart-count">0</span>
+      <span>Cart</span>
+    </a>
+  </div>
+  <div class="pannel">
+    <div class="pannel-all" onclick="window.location.href='index.html'"><i class="fa-solid fa-bars"></i> All</div>
+    <div class="pannel-ops">
+      <p onclick="window.location.href='index.html'">Continue Shopping</p>
+    </div>
+  </div>
+</header>
+
+<div class="toast" id="toast"></div>
+
+<div class="orders-page">
+  <h2>📦 Your Orders</h2>
+  <div id="ordersContainer"></div>
+</div>
+
+<footer>
+  <div class="foot-pannel1" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</div>
+  <div class="foot-pannel4">© 1996–2025, Amazon Clone, Inc.</div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

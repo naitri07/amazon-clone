@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Amazon Clone – Shopping Cart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <a href="index.html" class="nav-logo"><div class="logo"></div></a>
+    <div class="nav-search" style="flex:1">
+      <select class="search-select"><option>All</option></select>
+      <input class="search-input" placeholder="Search Amazon.in">
+      <div class="search-icon" onclick="window.location.href='index.html'">🔍</div>
+    </div>
+    <div class="nav-item" id="accountBox" onclick="toggleAccountMenu()">
+      <span class="top-line" id="helloText">Hello, sign in</span>
+      <span class="bot-line">Account &amp; Lists ▾</span>
+      <div class="account-dropdown-menu" id="accountMenu">
+        <div id="accountMenuContent"></div>
+      </div>
+    </div>
+    <a href="cart.html" class="nav-cart-btn">
+      <span style="font-size:1.8rem;line-height:1">🛒</span>
+      <span class="cart-count" id="cart-count">0</span>
+      <span>Cart</span>
+    </a>
+  </div>
+  <div class="pannel">
+    <div class="pannel-all" onclick="window.location.href='index.html'">☰ All</div>
+    <div class="pannel-ops">
+      <p onclick="window.location.href='index.html'">Continue Shopping</p>
+      <p onclick="window.location.href='orders.html'">My Orders</p>
+    </div>
+  </div>
+</header>
+
+<div class="toast" id="toast"></div>
+
+<!-- Online Payment Modal (Razorpay style) — only for Online Payment -->
+<div id="paymentModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="rz-brand">⚡ Razorpay</div>
+        <div class="rz-sub">Secure Payment Gateway</div>
+      </div>
+      <button class="modal-close" onclick="closePayModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Filled dynamically by openPayModal() -->
+    </div>
+  </div>
+</div>
+
+<div class="cart-page-bg">
+  <div class="cart-wrapper">
+    <div class="cart-left">
+      <div class="cart-title">🛒 Shopping Cart</div>
+      <div id="cart-container"></div>
+    </div>
+    <div class="cart-right">
+      <div id="total-price"></div>
+
+      <button class="checkout-btn" onclick="placeOrder('Online Payment')">
+        ⚡ Pay Online (Razorpay)
+      </button>
+
+      <div style="text-align:center;font-size:0.8rem;color:#777;margin:10px 0">— or —</div>
+
+      <button class="cod-btn" onclick="placeOrder('Cash on Delivery')">
+        🚚 Cash on Delivery
+      </button>
+
+      <div style="margin-top:14px;font-size:0.78rem;color:#555;border-top:1px solid #eee;padding-top:12px;line-height:1.6">
+        🛡 Safe &amp; Secure Payments<br>
+        🔄 Easy Returns &amp; Refunds<br>
+        📦 Free Delivery on orders above ₹499
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-pannel1" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</div>
+  <div class="foot-pannel4">© 1996–2025, Amazon Clone, Inc. or its affiliates</div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

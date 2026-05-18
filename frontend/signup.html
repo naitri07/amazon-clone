@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Clone – Create Account</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-bg">
+
+<a href="index.html"><img class="auth-logo" src="amazon_logo.png" alt="Amazon"></a>
+
+<div class="auth-box">
+  <h2>Create account</h2>
+  <div class="msg-box" id="msg"></div>
+
+  <label for="name">Your name</label>
+  <input type="text" id="name" placeholder="First and last name" autocomplete="name">
+
+  <label for="email">Email</label>
+  <input type="email" id="email" placeholder="Enter your email" autocomplete="email">
+
+  <label for="password">Password</label>
+  <input type="password" id="password" placeholder="At least 6 characters" autocomplete="new-password">
+
+  <label for="confirm">Re-enter password</label>
+  <input type="password" id="confirm" placeholder="Re-enter password" autocomplete="new-password">
+
+  <button class="auth-btn" id="signupBtn" onclick="signup()">Create your Amazon account</button>
+
+  <div class="auth-footer">
+    By creating an account, you agree to Amazon's
+    <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.
+  </div>
+
+  <div class="signin-link">
+    Already have an account? <a href="login.html">Sign in</a>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+</body>
+</html>

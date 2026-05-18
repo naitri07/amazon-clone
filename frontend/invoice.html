@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Clone – Invoice</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    @media print {
+      header, footer, .print-btn, .back-btn { display:none !important; }
+      .invoice-page { margin:0; padding:0; }
+      .invoice-box { border:none; box-shadow:none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <a href="index.html" class="nav-logo border"><div class="logo"></div></a>
+    <a href="orders.html" class="nav-item border" style="text-decoration:none">
+      <span class="top-line">Back to</span>
+      <span class="bot-line">My Orders</span>
+    </a>
+    <a href="cart.html" class="nav-cart-btn border">
+      <i class="fa-solid fa-cart-shopping" style="font-size:1.9rem"></i>
+      <span class="cart-count" id="cart-count">0</span>
+      <span>Cart</span>
+    </a>
+  </div>
+</header>
+
+<div class="toast" id="toast"></div>
+
+<div class="invoice-page">
+  <div class="invoice-box" id="invoiceBox">
+    <p style="color:#555">Loading invoice…</p>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-pannel1" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</div>
+  <div class="foot-pannel4">© 1996–2025, Amazon Clone, Inc.</div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

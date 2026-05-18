@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Clone – India's Largest Online Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ════════════════════ NAVBAR ════════════════════ -->
+<header>
+  <div class="navbar">
+    <a href="index.html" class="nav-logo border">
+      <div class="logo"></div>
+    </a>
+
+    <div class="nav-address border">
+      <p class="add-first"><i class="fa-solid fa-location-dot"></i> Deliver to</p>
+      <div class="add-icon">India 🇮🇳</div>
+    </div>
+
+    <div class="nav-search">
+      <select class="search-select" id="categoryFilter" onchange="doSearch()">
+        <option value="All">All</option>
+        <option value="Clothes">Clothes</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Furniture">Furniture</option>
+        <option value="Health">Health</option>
+        <option value="Beauty">Beauty</option>
+        <option value="Toys">Toys</option>
+        <option value="Travel">Travel</option>
+        <option value="Home">Home</option>
+      </select>
+      <input class="search-input" id="searchInput" placeholder="Search Amazon.in" onkeypress="handleSearchKey(event)">
+      <div class="search-icon" onclick="doSearch()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+    </div>
+
+    <div class="nav-item border" id="accountBox" onclick="toggleAccountMenu()">
+      <span class="top-line" id="helloText">Hello, sign in</span>
+      <span class="bot-line">Account &amp; Lists ▾</span>
+      <div class="account-dropdown-menu" id="accountMenu">
+        <div id="accountMenuContent"></div>
+      </div>
+    </div>
+
+    <div class="nav-item border" onclick="goToOrders()">
+      <span class="top-line">Returns</span>
+      <span class="bot-line">&amp; Orders</span>
+    </div>
+
+    <a href="wishlist.html" class="nav-item border" style="text-decoration:none">
+      <span class="top-line">Wishlist</span>
+      <span class="bot-line"><i class="fa-regular fa-heart"></i> <span id="wishlist-count">0</span></span>
+    </a>
+
+    <a href="cart.html" class="nav-cart-btn border">
+      <i class="fa-solid fa-cart-shopping" style="font-size:1.9rem"></i>
+      <span class="cart-count" id="cart-count">0</span>
+      <span>Cart</span>
+    </a>
+  </div>
+
+  <!-- Sub-panel -->
+  <div class="pannel">
+    <div class="pannel-all" onclick="toggleSideMenu()">
+      <i class="fa-solid fa-bars"></i> All
+    </div>
+    <div class="pannel-ops">
+      <p onclick="filterByTag('deals')">Today's Deals</p>
+      <p onclick="showPage('customer-service')">Customer Service</p>
+      <p onclick="showPage('registry')">Registry</p>
+      <p onclick="showPage('gift-cards')">Gift Cards</p>
+      <p onclick="showPage('sell')">Sell</p>
+    </div>
+    <div class="pannels-deals" onclick="filterCategory('Electronics')">
+      Shop deals in Electronics
+    </div>
+  </div>
+</header>
+
+<!-- Side menu overlay -->
+<div id="sideOverlay" onclick="toggleSideMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2999"></div>
+<div id="sideMenu" class="side-menu">
+  <div class="side-menu-header">
+    <i class="fa-solid fa-circle-user" style="font-size:1.4rem"></i>
+    <span id="sideUserName">Hello, Sign In</span>
+    <button onclick="toggleSideMenu()" style="margin-left:auto;background:none;border:none;color:white;font-size:1.2rem;cursor:pointer">✕</button>
+  </div>
+  <div class="side-menu-section">
+    <div class="side-section-title">Shop by Department</div>
+    <a onclick="filterCategory('Clothes');toggleSideMenu()">👕 Clothing</a>
+    <a onclick="filterCategory('Electronics');toggleSideMenu()">📱 Electronics</a>
+    <a onclick="filterCategory('Furniture');toggleSideMenu()">🪑 Furniture</a>
+    <a onclick="filterCategory('Health');toggleSideMenu()">💊 Health &amp; Personal Care</a>
+    <a onclick="filterCategory('Beauty');toggleSideMenu()">💄 Beauty</a>
+    <a onclick="filterCategory('Toys');toggleSideMenu()">🧸 Toys</a>
+    <a onclick="filterCategory('Travel');toggleSideMenu()">🧳 Travel</a>
+    <a onclick="filterCategory('Home');toggleSideMenu()">🏠 Home Essentials</a>
+  </div>
+  <div class="side-menu-section">
+    <div class="side-section-title">Help &amp; Settings</div>
+    <a href="orders.html">📦 Your Orders</a>
+    <a href="wishlist.html">❤️ Your Wishlist</a>
+    <a href="login.html" id="sideLoginLink">🔐 Sign In</a>
+    <a id="sideLogoutLink" onclick="logout()" style="display:none;color:#c0392b">🚪 Sign Out</a>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Info Panel -->
+<div id="infoPanel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:5000;display:none;align-items:center;justify-content:center">
+  <div style="background:white;border-radius:8px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;padding:30px;position:relative">
+    <button onclick="closeInfoPanel()" style="position:absolute;top:14px;right:14px;background:none;border:1px solid #ccc;border-radius:4px;padding:4px 10px;cursor:pointer">✕ Close</button>
+    <div id="infoPanelContent"></div>
+  </div>
+</div>
+
+<!-- ════════════════════ HERO ════════════════════ -->
+<div class="hero-section">
+  <!-- Sliding Images Container -->
+  <div class="hero-slider">
+    <img src="images/hero_image.jpg" class="hero-slide" alt="Banner 1">
+    <img src="images/banner_1.jpg" class="hero-slide" alt="Banner 2">
+    <img src="images/banner_2.png" class="hero-slide" alt="Banner 3">
+    <img src="images/banner_3.jpg" class="hero-slide" alt="Banner 4">
+  </div>
+
+  <!-- Message Box (Slider ke upar rahega) -->
+  <div class="hero-msg">
+    You are browsing Amazon Clone &nbsp;•&nbsp;
+    <a href="#" style="color:#007185">Shop millions of products</a>
+  </div>
+</div>
+
+<!-- ════════════════════ PRODUCTS ════════════════════ -->
+<div class="shop-section" id="shopSection">
+
+  <div class="box" data-name="Clothes" data-price="999" data-image="images/box1_image.jpg" data-category="Clothes">
+    <div class="box-header">
+      <h2>Clothes</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Clothes',999,'images/box1_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★☆</span><span class="rating-count">(1,284)</span></div>
+    <div class="price">₹999</div>
+    <span class="badge">Best Seller</span>
+    <div class="box-img" style="background-image:url('images/box1_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Clothes',999,'images/box1_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Clothes',999,'images/box1_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Health & Personal Care" data-price="499" data-image="imagesbox2_image.jpg data-category="Health">
+    <div class="box-header">
+      <h2>Health &amp; Personal Care</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Health &amp; Personal Care',499,'images/box2_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★☆</span><span class="rating-count">(832)</span></div>
+    <div class="price">₹499</div>
+    <div class="box-img" style="background-image:url('images/box2_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Health &amp; Personal Care',499,'images/box2_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Health &amp; Personal Care',499,'images/box2_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Furniture" data-price="7999" data-image="images/box3_image.jpg" data-category="Furniture">
+    <div class="box-header">
+      <h2>Furniture</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Furniture',7999,'images/box3_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★★</span><span class="rating-count">(426)</span></div>
+    <div class="price">₹7,999</div>
+    <div class="box-img" style="background-image:url('images/box3_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Furniture',7999,'images/box3_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Furniture',7999,'images/box3_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Electronics" data-price="14999" data-image="images/box4_image.jpg" data-category="Electronics">
+    <div class="box-header">
+      <h2>Electronics</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Electronics',14999,'images/box4_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★★</span><span class="rating-count">(2,156)</span></div>
+    <div class="price">₹14,999</div>
+    <span class="badge">Deal of the Day</span>
+    <div class="box-img" style="background-image:url('images/box4_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Electronics',14999,'images/box4_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Electronics',14999,'images/box4_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Beauty Picks" data-price="899" data-image="images/box5_image.jpg" data-category="Beauty">
+    <div class="box-header">
+      <h2>Beauty Picks</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Beauty Picks',899,'images/box5_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★☆</span><span class="rating-count">(678)</span></div>
+    <div class="price">₹899</div>
+    <div class="box-img" style="background-image:url('images/box5_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Beauty Picks',899,'images/box5_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Beauty Picks',899,'images/box5_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Pet Care" data-price="699" data-image="images/box6_image.jpg" data-category="Health">
+    <div class="box-header">
+      <h2>Pet Care</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Pet Care',699,'images/box6_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★☆</span><span class="rating-count">(341)</span></div>
+    <div class="price">₹699</div>
+    <div class="box-img" style="background-image:url('images/box6_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Pet Care',699,'images/box6_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Pet Care',699,'images/box6_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="New Arrival in Toys" data-price="1299" data-image="images/box7_image.jpg" data-category="Toys">
+    <div class="box-header">
+      <h2>New Arrival in Toys</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('New Arrival in Toys',1299,'images/box7_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★★</span><span class="rating-count">(912)</span></div>
+    <div class="price">₹1,299</div>
+    <span class="badge">New</span>
+    <div class="box-img" style="background-image:url('images/box7_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('New Arrival in Toys',1299,'images/box7_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('New Arrival in Toys',1299,'images/box7_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Fashion Trends" data-price="1599" data-image="images/box8_image.jpg" data-category="Clothes">
+    <div class="box-header">
+      <h2>Fashion Trends</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Fashion Trends',1599,'images/box8_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★☆</span><span class="rating-count">(503)</span></div>
+    <div class="price">₹1,599</div>
+    <div class="box-img" style="background-image:url('images/box8_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Fashion Trends',1599,'images/box8_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Fashion Trends',1599,'images/box8_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Home Essentials" data-price="1999" data-image="images/box9_image.jpg" data-category="Home">
+    <div class="box-header">
+      <h2>Home Essentials</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Home Essentials',1999,'images/box9_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★☆</span><span class="rating-count">(765)</span></div>
+    <div class="price">₹1,999</div>
+    <div class="box-img" style="background-image:url('images/box9_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Home Essentials',1999,'images/box9_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Home Essentials',1999,'images/box9_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Travel Essentials" data-price="2499" data-image="images/box10_image.jpg" data-category="Travel">
+    <div class="box-header">
+      <h2>Travel Essentials</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Travel Essentials',2499,'images/box10_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★★</span><span class="rating-count">(389)</span></div>
+    <div class="price">₹2,499</div>
+    <div class="box-img" style="background-image:url('images/box10_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Travel Essentials',2499,'images/box10_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Travel Essentials',2499,'images/box10_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Refresh Your Space" data-price="3499" data-image="images/box11_image.jpg" data-category="Home">
+    <div class="box-header">
+      <h2>Refresh Your Space</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Refresh Your Space',3499,'images/box11_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★☆</span><span class="rating-count">(231)</span></div>
+    <div class="price">₹3,499</div>
+    <div class="box-img" style="background-image:url('images/box11_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Refresh Your Space',3499,'images/box11_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Refresh Your Space',3499,'images/box11_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+  <div class="box" data-name="Fashion for Less" data-price="599" data-image="images/box12_image.jpg" data-category="Clothes">
+    <div class="box-header">
+      <h2>Fashion for Less</h2>
+      <button class="wishlist-btn" onclick="toggleWishlist('Fashion for Less',599,'images/box12_image.jpg',this)"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="star-rating"><span class="stars">★★★★☆</span><span class="rating-count">(1,105)</span></div>
+    <div class="price">₹599</div>
+    <span class="badge">Limited Deal</span>
+    <div class="box-img" style="background-image:url('images/box12_image.jpg')"></div>
+    <div class="box-actions">
+      <button class="add-cart-btn" onclick="addToCart('Fashion for Less',599,'images/box12_image.jpg',this)">Add to Cart</button>
+      <button class="buy-now-btn" onclick="buyNow('Fashion for Less',599,'images/box12_image.jpg')">Buy Now</button>
+    </div>
+  </div>
+
+</div><!-- end shop-section -->
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer>
+  <div class="foot-pannel1" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</div>
+  <div class="foot-pannel2">
+    <div class="foot-col">
+      <h4>Get to Know Us</h4>
+      <a href="#">Careers</a><a href="#">Blog</a>
+      <a href="#">About Amazon</a><a href="#">Investor Relations</a>
+    </div>
+    <div class="foot-col">
+      <h4>Make Money with Us</h4>
+      <a href="#" onclick="showPage('sell')">Sell on Amazon</a>
+      <a href="#">Become an Affiliate</a>
+      <a href="#">Advertise Your Products</a>
+    </div>
+    <div class="foot-col">
+      <h4>Payment Products</h4>
+      <a href="#">Amazon Pay</a>
+      <a href="#">Reload Your Balance</a>
+      <a href="#">Currency Converter</a>
+    </div>
+    <div class="foot-col">
+      <h4>Let Us Help You</h4>
+      <a href="orders.html">Your Orders</a>
+      <a href="#">Returns &amp; Replacements</a>
+      <a href="#" onclick="showPage('customer-service')">Help</a>
+    </div>
+  </div>
+  <div class="foot-pannel4">© 1996–2025, Amazon Clone, Inc.</div>
+</footer>
+
+<!-- Fake Razorpay Payment Modal -->
+<div id="paymentModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div><div class="rz-brand"><i class="fa-solid fa-bolt"></i> Razorpay</div><div class="rz-sub">Secure Payment Gateway</div></div>
+      <button class="modal-close" onclick="closePayModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="pay-amount">Pay <span id="payAmountDisplay">₹0</span></div>
+      <div class="pay-methods">
+        <div class="pay-method active" onclick="selectPayMethod('card',this)"><i class="fa-regular fa-credit-card"></i><span>Card</span></div>
+        <div class="pay-method" onclick="selectPayMethod('upi',this)"><i class="fa-solid fa-mobile-screen"></i><span>UPI</span></div>
+        <div class="pay-method" onclick="selectPayMethod('netbank',this)"><i class="fa-solid fa-building-columns"></i><span>Netbanking</span></div>
+        <div class="pay-method" onclick="selectPayMethod('wallet',this)"><i class="fa-solid fa-wallet"></i><span>Wallet</span></div>
+      </div>
+      <div id="form-card" class="pay-form">
+        <input type="text" placeholder="Card number  4111 1111 1111 1111" maxlength="19">
+        <input type="text" placeholder="Cardholder Name">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <input type="text" placeholder="MM / YY" maxlength="5">
+          <input type="text" placeholder="CVV" maxlength="3">
+        </div>
+      </div>
+      <div id="form-upi" class="pay-form" style="display:none"><input type="text" placeholder="Enter UPI ID  e.g. name@upi"></div>
+      <div id="form-netbank" class="pay-form" style="display:none">
+        <select><option>Select Bank</option><option>SBI</option><option>HDFC</option><option>ICICI</option><option>Axis</option><option>Kotak</option></select>
+      </div>
+      <div id="form-wallet" class="pay-form" style="display:none">
+        <select><option>Select Wallet</option><option>Paytm</option><option>PhonePe</option><option>Amazon Pay</option><option>Mobikwik</option></select>
+      </div>
+      <button class="pay-btn" onclick="processPayment()"><i class="fa-solid fa-lock"></i> Pay Securely</button>
+      <p class="secure-note"><i class="fa-solid fa-shield-halved" style="color:#07b35a"></i> 256-bit SSL Encrypted &amp; Secure</p>
+    </div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
