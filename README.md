@@ -25,6 +25,8 @@ check out the [Live Video Walkthrough on Loom] (https://www.loom.com/share/da7d9
    ```bash
    git clone https://github.com/naitri07/amazon-clone.git
 
-## start command
-
-- cd backend : node server.js
+## 🚀 How to Run Locally
+cd backend
+npm install
+npm run dev
+Then open index.html with Live Server
